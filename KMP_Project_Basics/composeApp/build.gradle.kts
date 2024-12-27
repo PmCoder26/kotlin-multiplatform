@@ -61,11 +61,15 @@ kotlin {
             implementation(libs.androidx.room.runtime)
             implementation(libs.sqlite.bundled)
 
-            // Navigation dependency
+            // Navigation configs.
             implementation(libs.navigation.compose)
 
             // Ktor client configs.
             implementation(libs.bundles.ktor)
+
+            // Datastore configs.
+            implementation(libs.datastore.preferences)
+            implementation(libs.datastore)
 
         }
 
