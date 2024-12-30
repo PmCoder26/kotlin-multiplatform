@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class SignupResponse (
+data class SignUpResponse (
     val id: Long,
     val username: String
 )

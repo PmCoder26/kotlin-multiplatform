@@ -19,13 +19,15 @@ class PersonClient(
     suspend fun getAllPeople(): List<Person> {
         try {
             val response = httpClient.get(
-                urlString = "http://192.168.246.29:8080/persons/getAllPeople",
-            ).body<ApiResponse<List<Person>>>()
-            print("Response: ${response.data}")
-            response?.data?.let { data ->
+                urlString = "http://$HOST_URL/persons/getAllPeople",
+            ) {
+                contentType(ContentType.Application.Json)
+            }.body<ApiResponse<List<Person>>>()
+            response.data?.let { data ->
+                println("Response: ${data}")
                 return data
             }
-            response?.error?.let { error ->
+            response.error?.let { error ->
                 println("All people error: ${error.message}")
             }
         } catch (e: Exception){
@@ -37,7 +39,7 @@ class PersonClient(
     suspend fun addPerson(person: Person) {
         try{
             httpClient.post(
-                urlString = "http://192.168.246.29:8080/persons/addPerson"
+                urlString = "http://$HOST_URL/persons/addPerson"
             ){
                 contentType(ContentType.Application.Json)
                 setBody(person)
@@ -50,13 +52,13 @@ class PersonClient(
     suspend fun removePerson(id: Long) {
         try{
             val response = httpClient.delete(
-                urlString = "http://192.168.246.29:8080/persons/removePerson/${id}"
+                urlString = "http://$HOST_URL/persons/removePerson/${id}"
             ).body<ApiResponse<Message>>()
-            response?.data?.let { data ->
+            response.data?.let { data ->
                 val message: Message = data
                 println("Api Response: $message")
             }
-            response?.error?.let{ error ->
+            response.error?.let{ error ->
                 println("Api Response error: ${error.message}")
             }
         } catch(e: Exception) {

@@ -8,11 +8,11 @@ import org.example.project.datastore.createDataStore
 import org.example.project.ktor_client.createHttpClient
 
 fun MainViewController() = ComposeUIViewController {
-    val httpclient = remember {
-        createHttpClient(Darwin.create())
-    }
     val datastore = remember {
         createDataStore()
+    }
+    val httpclient = remember {
+        createHttpClient(Darwin.create(), datastore)
     }
     App(getDao(), httpclient, datastore)
 

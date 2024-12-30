@@ -15,14 +15,13 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         title = "KotlinProject",
     ) {
-        val httpclient = remember {
-            createHttpClient(OkHttp.create())
-        }
         val datastore = remember {
             createDataStore { DATASTORE_FILE_NAME }
         }
+        val httpclient = remember {
+            createHttpClient(OkHttp.create(), datastore)
+        }
 
         App(getDao(), httpclient, datastore)
-
     }
 }
