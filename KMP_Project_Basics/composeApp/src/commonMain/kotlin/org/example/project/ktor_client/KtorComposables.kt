@@ -69,7 +69,7 @@ fun KtorScreen(
         AuthClient(httpClient, tokenManager)
     }
     val personClient = remember {
-        PersonClient(httpClient, authClient)
+        PersonClient(httpClient, tokenManager)
     }
 
     NavHost(navController = ktorNavCon, startDestination = "KtorHomeScreen") {

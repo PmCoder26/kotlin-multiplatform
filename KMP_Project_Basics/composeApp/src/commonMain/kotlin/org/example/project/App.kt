@@ -56,7 +56,7 @@ fun App(dao: UserDao, httpclient: HttpClient = HttpClient(), dataStore: DataStor
 
             composable("KtorScreen") {
                 val tokenManager = remember {
-                    TokenManager(dataStore)
+                    TokenManager(dataStore, httpclient)
                 }
                 KtorScreen(httpclient, tokenManager)
             }
