@@ -31,7 +31,6 @@ import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -66,11 +65,11 @@ fun KtorScreen(
     tokenManager: TokenManager? = null
 ) {
     val ktorNavCon = rememberNavController()
-    val personClient = remember {
-        PersonClient(httpClient)
-    }
     val authClient = remember {
         AuthClient(httpClient, tokenManager)
+    }
+    val personClient = remember {
+        PersonClient(httpClient, authClient)
     }
 
     NavHost(navController = ktorNavCon, startDestination = "KtorHomeScreen") {
@@ -86,7 +85,7 @@ fun KtorScreen(
                 }
             }
             if(route) {
-                PeopleDetailsScreen(personClient)
+                PeopleDetailsScreen(personClient, authClient, ktorNavCon)
             }
             else {
                 KtorHomeScreen(ktorNavCon)
@@ -310,7 +309,7 @@ fun LoginScreen(
 
 @Composable
 fun PeopleDetailsScreen(
-    personClient: PersonClient = PersonClient(HttpClient()),
+    personClient: PersonClient = PersonClient(HttpClient(), null),
     authClient: AuthClient = AuthClient(),
     ktorNavCon: NavHostController = rememberNavController()
 ) {

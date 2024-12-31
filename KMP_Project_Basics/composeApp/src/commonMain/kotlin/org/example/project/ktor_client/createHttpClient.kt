@@ -42,18 +42,6 @@ fun createHttpClient(engine: HttpClientEngine, dataStore: DataStore<Preferences>
                         null
                     }
                 }
-                refreshTokens {
-                    val tokenState = tokenManager.tokenState2.value
-                    if(tokenManager.tokensCheck()) {
-                        BearerTokens(
-                            accessToken = tokenState.accessToken.toString(),
-                            refreshToken = tokenState.refreshToken.toString()
-                        )
-                    }
-                    else{
-                        null
-                    }
-                }
             }
         }
     }
