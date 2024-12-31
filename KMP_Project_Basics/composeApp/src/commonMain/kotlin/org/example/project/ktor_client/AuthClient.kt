@@ -81,9 +81,7 @@ class AuthClient(
                             refreshToken = tokenState.refreshToken!!
                         )
                     )
-                    headers {
-                        remove("Authorization")
-                    }
+                    headers.remove("Authorization")
                 }.body<ApiResponse<Tokens>>()
             } catch (e: Exception) {
                 println("Token refresh error: ${e.message}")
