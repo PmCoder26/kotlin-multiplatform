@@ -74,6 +74,7 @@ class AuthClient(
                 httpClient!!.post(
                     urlString = "http://$HOST_URL/auth/refresh-tokens"
                 ) {
+                    headers.remove("Authorization")
                     contentType(ContentType.Application.Json)
                     setBody(
                         Tokens(
@@ -81,7 +82,6 @@ class AuthClient(
                             refreshToken = tokenState.refreshToken!!
                         )
                     )
-                    headers.remove("Authorization")
                 }.body<ApiResponse<Tokens>>()
             } catch (e: Exception) {
                 println("Token refresh error: ${e.message}")
@@ -95,7 +95,6 @@ class AuthClient(
                         refreshToken = data.refreshToken
                     )
                 )
-
                 updateClient()
             }
             response?.error?.let { error ->

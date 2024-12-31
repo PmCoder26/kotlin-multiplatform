@@ -31,7 +31,7 @@ class PersonClient(
             }
             response.error?.let { error ->
                 handleTokensExpired(error)
-                println("All people error: ${error.message}")
+                println("All people response error: ${error.message}")
             }
         } catch (e: Exception){
             println("Error: " + e.message)

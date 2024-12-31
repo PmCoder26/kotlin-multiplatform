@@ -46,9 +46,11 @@ class TokenManager(
                     refresh
                 }
                 _state.update {
+                    println("Tokens updated")
                     TokenState(accessToken.value, refreshToken.value)
                 }
             }
+
         }
     }
 
