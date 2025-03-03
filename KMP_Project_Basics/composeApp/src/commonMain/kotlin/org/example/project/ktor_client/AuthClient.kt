@@ -4,25 +4,70 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-import org.example.project.ktor_client.dtos.Signup
-import org.example.project.ktor_client.dtos.SignupResponse
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import org.example.project.ktor_client.dtos.ApiResponse
+import org.example.project.ktor_client.dtos.LoginRequest
+import org.example.project.ktor_client.dtos.LoginResponse
+import org.example.project.ktor_client.dtos.SignUpRequest
+import org.example.project.ktor_client.dtos.SignUpResponse
 
 class AuthClient(
-    private val httpClient: HttpClient
+    private val httpClient: HttpClient? = null,
+    private val tokenManager: TokenManager? = null,
 ) {
 
-    suspend fun signup(user: Signup): SignupResponse? {
+    suspend fun signUp(signUpRequest: SignUpRequest): Boolean{
         val response = try{
-            httpClient.post(
-                urlString = "http://192.168.246.29:8080/auth/signup",
+            httpClient!!.post(
+                urlString = "http://$HOST_URL/sign/signup",
             ){
-                setBody(user)
-            }.body<SignupResponse>()
+                contentType(ContentType.Application.Json)
+                setBody(signUpRequest)
+            }.body<ApiResponse<SignUpResponse>>()
         } catch (e: Exception){
-            println(e.message)
-            return null
+            println("SignUp error: ${e.message}")
+            null
         }
-        return response
+        response?.data?.let { data ->
+            println("SignUp response: ${data}")
+            return true
+        }
+        response?.error?.let { error ->
+            println("SignUp response error: ${error.message}")
+        }
+        return false
     }
+
+    suspend fun login(loginRequest: LoginRequest) {
+        val response = try{
+            httpClient!!.post(
+                urlString = "http://$HOST_URL/auth/login"
+            ){
+                contentType(ContentType.Application.Json)
+                setBody(loginRequest)
+            }.body<ApiResponse<LoginResponse>>()
+        } catch (e: Exception) {
+            println("Login error: ${e.message}")
+            null
+        }
+        response?.data?.let { data ->
+            tokenManager?.saveTokens(data)
+            println("Login response data: ${data}")
+        }
+        response?.error?.let { error ->
+            println("Login response error: ${error.message}")
+        }
+    }
+
+    fun checkTokens(): Boolean {
+        val tokenState = tokenManager?.tokenState2?.value
+        return tokenState?.accessToken != null && tokenState.refreshToken != null
+    }
+
+    suspend fun logout() {
+        tokenManager?.clearTokens()
+    }
+
 
 }

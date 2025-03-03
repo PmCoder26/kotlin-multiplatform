@@ -13,27 +13,33 @@ import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import io.ktor.client.HttpClient
 import org.example.project.database.room_database.UserDao
+import org.example.project.datastore.DataStoreScreen
 import org.example.project.ktor_client.KtorScreen
+import org.example.project.ktor_client.TokenManager
 import org.example.project.room_database.RoomDatabaseScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
-fun App(dao: UserDao, httpclient: HttpClient) {
+fun App(dao: UserDao, httpclient: HttpClient = HttpClient(), dataStore: DataStore<Preferences>) {
 
-    val routeList = arrayListOf<NavRoute>(
+    val routeList = arrayListOf(
         NavRoute("Room", "RoomDatabaseScreen"),
-        NavRoute("Ktor client", "KtorScreen")
+        NavRoute("Ktor client", "KtorScreen"),
+        NavRoute("DataStore", "DataStoreScreen"),
     )
 
     MaterialTheme {
@@ -49,7 +55,14 @@ fun App(dao: UserDao, httpclient: HttpClient) {
             }
 
             composable("KtorScreen") {
-                KtorScreen(httpclient)
+                val tokenManager = remember {
+                    TokenManager(dataStore, httpclient)
+                }
+                KtorScreen(httpclient, tokenManager)
+            }
+
+            composable("DataStoreScreen") {
+                DataStoreScreen(dataStore)
             }
         }
     }

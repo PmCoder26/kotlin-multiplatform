@@ -14,11 +14,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+            val datastore = remember {
+                createDataStore(this@MainActivity)
+            }
             val httpclient = remember {
-                createHttpClient(OkHttp.create())
+                createHttpClient(OkHttp.create(), datastore)
             }
 
-            App(getDao(this), httpclient)
+            App(getDao(this), httpclient, datastore)
+
         }
     }
 
