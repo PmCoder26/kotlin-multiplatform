@@ -46,6 +46,10 @@ kotlin {
 
             // Ktor client configs.
             implementation(libs.ktor.client.okhttp)
+
+            // Koin configs.
+            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -70,6 +74,12 @@ kotlin {
             // Datastore configs.
             implementation(libs.datastore.preferences)
             implementation(libs.datastore)
+
+            // Koin configs.
+            api(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            implementation(libs.lifecycle.viewmodel)
 
         }
 

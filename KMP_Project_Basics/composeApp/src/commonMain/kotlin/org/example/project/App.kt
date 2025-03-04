@@ -27,11 +27,16 @@ import androidx.navigation.compose.rememberNavController
 import io.ktor.client.HttpClient
 import org.example.project.database.room_database.UserDao
 import org.example.project.datastore.DataStoreScreen
+import org.example.project.dependency_injection.dependencies.MyViewModel
 import org.example.project.ktor_client.KtorScreen
 import org.example.project.ktor_client.TokenManager
 import org.example.project.room_database.RoomDatabaseScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 @Preview
 fun App(dao: UserDao, httpclient: HttpClient = HttpClient(), dataStore: DataStore<Preferences>) {
@@ -40,6 +45,7 @@ fun App(dao: UserDao, httpclient: HttpClient = HttpClient(), dataStore: DataStor
         NavRoute("Room", "RoomDatabaseScreen"),
         NavRoute("Ktor client", "KtorScreen"),
         NavRoute("DataStore", "DataStoreScreen"),
+        NavRoute("Koin", "DependencyInjectionScreen"),
     )
 
     MaterialTheme {
@@ -63,6 +69,14 @@ fun App(dao: UserDao, httpclient: HttpClient = HttpClient(), dataStore: DataStor
 
             composable("DataStoreScreen") {
                 DataStoreScreen(dataStore)
+            }
+
+            composable("DependencyInjectionScreen") {
+                val myViewModel1 = koinViewModel<MyViewModel>()
+                val myViewModel2 = koinViewModel<MyViewModel>()
+                println("Viewmodel-1 ${myViewModel1.hashCode()}")
+                println("Viewmodel-2 ${myViewModel2.hashCode()}")
+
             }
         }
     }
