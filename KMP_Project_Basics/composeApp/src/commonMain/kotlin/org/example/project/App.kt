@@ -27,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import io.ktor.client.HttpClient
 import org.example.project.database.room_database.UserDao
 import org.example.project.datastore.DataStoreScreen
+import org.example.project.dependency_injection.DependencyInjectionScreen
 import org.example.project.dependency_injection.dependencies.MyViewModel
 import org.example.project.ktor_client.KtorScreen
 import org.example.project.ktor_client.TokenManager
@@ -72,11 +73,7 @@ fun App(dao: UserDao, httpclient: HttpClient = HttpClient(), dataStore: DataStor
             }
 
             composable("DependencyInjectionScreen") {
-                val myViewModel1 = koinViewModel<MyViewModel>()
-                val myViewModel2 = koinViewModel<MyViewModel>()
-                println("Viewmodel-1 ${myViewModel1.hashCode()}")
-                println("Viewmodel-2 ${myViewModel2.hashCode()}")
-
+                DependencyInjectionScreen()
             }
         }
     }
