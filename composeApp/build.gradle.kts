@@ -54,6 +54,16 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+
+            // navigation configs.
+            implementation("org.jetbrains.androidx.navigation:navigation-compose:2.9.2")
+
+            // koin configs.
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+
+            // icons configs.
+            implementation(libs.compose.material.icons.extended)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
