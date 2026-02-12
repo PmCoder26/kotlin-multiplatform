@@ -19,6 +19,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,8 +36,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.parimal.kotlin_multiplatform.ktor.ApiClient
+import com.parimal.kotlin_multiplatform.ktor.Todo
+import com.parimal.kotlin_multiplatform.ktor.TodosScreen
 import com.parimal.kotlin_multiplatform.viewmodels.StudentViewModel
 import com.parimal.kotlin_multiplatform.viewmodels.ViewModelScreen
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 
@@ -69,6 +75,19 @@ fun App() {
                 )
             }
 
+            composable("Todos") {
+                val apiClient = koinInject<ApiClient>()
+
+                val todosList by produceState(initialValue = emptyList<Todo>()) {
+                    value = apiClient.getTodos()
+                }
+
+                TodosScreen(
+                    todosList = todosList,
+                    onBackClicked = { navController.popBackStack() }
+                )
+            }
+
         }
 
     }
@@ -79,7 +98,7 @@ fun App() {
 @Composable
 fun RouteGallery(navController: NavHostController = rememberNavController()) {
 
-    val routeList = listOf("ViewModel")
+    val routeList = listOf("ViewModel", "Todos")
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),

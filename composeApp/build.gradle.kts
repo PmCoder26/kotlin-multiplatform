@@ -8,6 +8,9 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
+
+    // ktor configs.
+    kotlin("plugin.serialization") version "1.9.0"
 }
 
 kotlin {
@@ -44,6 +47,9 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
+
+            // ktor configs.
+            implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -64,6 +70,12 @@ kotlin {
 
             // icons configs.
             implementation(libs.compose.material.icons.extended)
+
+            // ktor configs.
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.json)
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -71,6 +83,18 @@ kotlin {
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+
+            // ktor configs.
+            implementation(libs.ktor.client.cio)
+
+        }
+        iosMain.dependencies {
+            // ktor configs.
+            implementation(libs.ktor.client.darwin)
+        }
+        webMain.dependencies {
+            // ktor configs.
+            implementation(libs.ktor.client.js)
         }
     }
 }
