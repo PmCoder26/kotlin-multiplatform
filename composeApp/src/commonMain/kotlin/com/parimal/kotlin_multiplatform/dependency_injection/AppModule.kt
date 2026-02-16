@@ -1,6 +1,7 @@
 package com.parimal.kotlin_multiplatform.dependency_injection
 
 
+import com.parimal.kotlin_multiplatform.datastore.CounterViewModel
 import com.parimal.kotlin_multiplatform.ktor.ApiClient
 import com.parimal.kotlin_multiplatform.ktor.getHttpClientEngine
 import com.parimal.kotlin_multiplatform.viewmodels.StudentViewModel
@@ -37,6 +38,8 @@ val appModule = module {
 
     singleOf(::ApiClient)
 
+    singleOf(::CounterViewModel)
+
 }
 
 
@@ -44,6 +47,6 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
 
     appDeclaration()
 
-    modules(appModule)
+    modules(appModule, platformModule)
 
 }

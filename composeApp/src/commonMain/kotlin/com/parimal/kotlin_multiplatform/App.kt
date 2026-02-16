@@ -19,6 +19,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -36,6 +37,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.parimal.kotlin_multiplatform.datastore.CounterScreen
+import com.parimal.kotlin_multiplatform.datastore.CounterViewModel
 import com.parimal.kotlin_multiplatform.ktor.ApiClient
 import com.parimal.kotlin_multiplatform.ktor.Todo
 import com.parimal.kotlin_multiplatform.ktor.TodosScreen
@@ -88,6 +91,19 @@ fun App() {
                 )
             }
 
+            composable("DataStore") {
+
+                val viewmodel = koinViewModel<CounterViewModel>(viewModelStoreOwner = globalViewModelOwner)
+                val counter by viewmodel.counter.collectAsState()
+
+                CounterScreen(
+                    counter = counter,
+                    onCounterIncrement = { viewmodel.incrementCounter() },
+                    onBackClick = { navController.popBackStack() }
+                )
+
+            }
+
         }
 
     }
@@ -98,7 +114,7 @@ fun App() {
 @Composable
 fun RouteGallery(navController: NavHostController = rememberNavController()) {
 
-    val routeList = listOf("ViewModel", "Todos")
+    val routeList = listOf("ViewModel", "Todos", "DataStore")
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
